@@ -37,7 +37,7 @@ data_size = len(data)
 lr = 0.2
 # hidden_node_size =
 goal_sse = 1e-2
-max_epoch = 10000 * 10
+max_epoch = 10000
 hidden_node_begin = 1
 hidden_node_end = 20
 
@@ -69,12 +69,13 @@ while hidden_node_size <= hidden_node_end:
         l1_delta = l1_error * deriv_sigmoid(l1)
 
         sse = np.sum(l2_error ** 2)
-        if iter % 10000 == 0:
+        if iter == 0 or iter == max_epoch-1:
             print("Node Size: %d, Iter: %d" % (hidden_node_size,iter))
             rme = np.mean(np.absolute(l2_error))
             print("Node Size: %d, Epoches: %d, SSE: %f, RME: %f" % (hidden_node_size,iter, sse, rme))
 
-        w0 += lr * np.dot(l0, l1_delta)
+        w0 += lr * np.dot(l0.T, l1_delta)
+        w1 += lr * np.dot(l1.T, l2_delta)
 
         iter += 1
 

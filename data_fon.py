@@ -106,13 +106,16 @@ for each_epoch in range(epoch_list_size):
             l2_delta = l2_error * deriv_sigmoid(l2)
 
             l1_error = np.dot(l2_delta, w1.T)
-            l2_delta = l1_error * deriv_sigmoid(l1)
+            l1_delta = l1_error * deriv_sigmoid(l1)
 
             sse = np.sum(l2_error ** 2)
             if iter % 10000 == 0:
                 print("Iter: %d" % iter)
             # rme = np.mean(np.absolute(l2_error))
             #     print("Epoches: %d, SSE: %f, RME: %f" % (iter, sse, rme))
+
+            w0 += lr * np.dot(l0.T, l1_delta)
+            w1 += lr * np.dot(l1.T, l2_delta)
 
             iter += 1
 
