@@ -1,0 +1,11 @@
+select music_playlist_acoustic_second.*, 1 as genre_id from music_playlist_acoustic_second 
+union
+select music_playlist_alternative_second.*,2 as genre_id from music_playlist_alternative_second
+UNION
+select `music_playlist_hip-hop_second`.*,3 as genre_id from `music_playlist_hip-hop_second`
+UNION
+select music_playlist_pop_second.*,4 as genre_id from music_playlist_pop_second
+UNION
+select `music_playlist_r&b_second`.*,5 as genre_id from `music_playlist_r&b_second`
+UNION
+select music_playlist_rock_second.*,6 as genre_id from music_playlist_rock_second

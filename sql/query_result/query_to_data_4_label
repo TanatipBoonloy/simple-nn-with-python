@@ -1,0 +1,37 @@
+-- query to get results
+-- select * from (
+-- select count(*) from (
+select
+-- music_info.android_information_id as music_id,
+music_info.danceability as danceability,
+music_info.energy as energy,
+(music_info.`key`)/11 as `key`,
+((if(music_info.loudness>-1,-1,if(music_info.loudness<-14,-14,music_info.loudness)))+14)/13 as loudness,
+music_info.`mode` as `mode`,
+music_info.speechiness as speechiness,
+music_info.acousticness as acousticness,
+music_info.instrumentalness as instrumentalness,
+music_info.liveness as liveness,
+music_info.valence as valence,
+(if(music_info.tempo<74,74,if(music_info.tempo>194,194,music_info.tempo))-74)/120 as tempo,
+((if(music_info.time_signature<3,3,if(music_info.time_signature>5,5,music_info.time_signature)))-3)/2 as time_signature,
+(music_info.genre_id / 6) as genre,
+If( (listen_info.total_time / ( listen_info.listen_times * android_info.duration ) >= 0.75 ),1,0) as very_favor,
+If( (listen_info.total_time / ( listen_info.listen_times * android_info.duration ) >= 0.50 ) && (listen_info.total_time / ( listen_info.listen_times * android_info.duration ) < 0.75 ),1,0) as favor,
+If( (listen_info.total_time / ( listen_info.listen_times * android_info.duration ) >= 0.25 ) && (listen_info.total_time / ( listen_info.listen_times * android_info.duration ) < 0.50 ),1,0) as average,
+If( (listen_info.total_time / ( listen_info.listen_times * android_info.duration ) < 0.25 ) || (listen_info.total_time / ( listen_info.listen_times * android_info.duration ) is null ) ,1,0) as dislike,
+(listen_info.total_time / ( listen_info.listen_times * android_info.duration )) as cal_value
+from
+(select dataset.results.android_information_id,
+count(*) as listen_times,
+sum(dataset.results.duration) as total_time 
+from dataset.results
+where dataset.results.volunteer_id = 5
+group by dataset.results.android_information_id ) as listen_info
+right join dataset.android_information as android_info
+on android_info.id = listen_info.android_information_id
+right join dataset.music_information as music_info
+on music_info.android_information_id = listen_info.android_information_id
+order by very_favor desc , favor desc , average desc, dislike desc
+-- ) as result_all_by_volunteer
+-- where ( very_favor + favor + average + disliked ) = 1

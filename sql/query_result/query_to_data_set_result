@@ -1,0 +1,28 @@
+-- query to get results
+select listen_info.android_information_id as music_id,
+music_info.danceability as danceability,
+music_info.energy as energy,
+music_info.`key` as `key`,
+music_info.loudness as loudness,
+music_info.`mode` as `mode`,
+music_info.speechiness as speechiness,
+music_info.acousticness as acousticness,
+music_info.instrumentalness as instrumentalness,
+music_info.liveness as liveness,
+music_info.valence as valence,
+music_info.tempo as tempo,
+music_info.time_signature as time_signature,
+music_info.genre_id as genre_id,
+music_info.duration_ms as duration_ms,
+listen_info.total_time as total_time,
+listen_info.listen_times as listen_times
+from
+(select dataset.results.android_information_id,
+count(*) as listen_times,
+sum(dataset.results.duration) as total_time 
+from dataset.results
+where dataset.results.volunteer_id = 1 
+group by dataset.results.android_information_id ) as listen_info
+join dataset.music_information as music_info
+on music_info.android_information_id = listen_info.android_information_id
+order by music_id

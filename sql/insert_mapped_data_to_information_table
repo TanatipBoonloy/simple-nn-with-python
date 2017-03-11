@@ -1,0 +1,45 @@
+insert into dataset.music_information
+select music_with_genre.id as id,
+music_with_genre.genre_id as genre_id,
+android_file_name_second.id as android_file_id,
+music_with_genre.danceability as danceability,
+music_with_genre.energy as energy,
+music_with_genre.`key` as `key`,
+music_with_genre.loudness as loudness,
+music_with_genre.`mode` as `mode`,
+music_with_genre.speechiness as speechiness,
+music_with_genre.acousticness as acousticness,
+music_with_genre.instrumentalness as instrumentalness,
+music_with_genre.liveness as liveness,
+music_with_genre.valence as valence,
+music_with_genre.tempo as tempo,
+android_file_name_second.duration as duration_ms,
+music_with_genre.time_signature as time_signature
+from
+(select music_attributes_second.*,genre_playlist.genre_id as genre_id,genre_playlist.`name` as `name`, genre_playlist.artists as artists from music_attributes_second
+join 
+(select music_playlist_acoustic_second.*, 1 as genre_id from music_playlist_acoustic_second 
+union
+select music_playlist_alternative_second.*,2 as genre_id from music_playlist_alternative_second
+UNION
+select `music_playlist_hip-hop_second`.*,3 as genre_id from `music_playlist_hip-hop_second`
+union
+select music_playlist_pop_second.*,4 as genre_id from music_playlist_pop_second
+UNION
+select `music_playlist_r&b_second`.*,5 as genre_id from `music_playlist_r&b_second`	
+UNION
+select music_playlist_rock_second.*,6 as genre_id from music_playlist_rock_second
+UNION
+select music_playlist_reserve_second.*,4 as genre_id from music_playlist_reserve_second
+) as genre_playlist
+on music_attributes_second.id = genre_playlist.id) as music_with_genre
+join android_file_name_second
+on android_file_name_second.`name` like concat('%',music_with_genre.`name`,'%')
+where (music_with_genre.id = '40YcuQysJ0KlGQTeGUosTC' && android_file_name_second.id = 132) || 
+(music_with_genre.id = '664gdARxaClFsoF5SXKOws' && android_file_name_second.id = 103) ||
+(music_with_genre.id = '2eJ8ij1T3cNUKiGdcUvKhy' && android_file_name_second.id = 143) ||
+(music_with_genre.id = '3TCauNPqFiniaYHBvEVoHG' && android_file_name_second.id = 115) ||
+(music_with_genre.id != '40YcuQysJ0KlGQTeGUosTC' && 
+music_with_genre.id != '664gdARxaClFsoF5SXKOws' && 
+music_with_genre.id != '2eJ8ij1T3cNUKiGdcUvKhy' && 
+music_with_genre.id != '3TCauNPqFiniaYHBvEVoHG')
