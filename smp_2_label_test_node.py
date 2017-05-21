@@ -64,6 +64,10 @@ for volunteer_id in range(1, 11, 1):
         # random weight
         w0 = np.random.random((input_size, hidden_node_size))
         w1 = np.random.random((hidden_node_size, output_size))
+        print("eiei")
+        print(w0)
+        print(w1)
+        print("eiei")
 
         # init measure value
         iter = 0

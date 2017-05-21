@@ -67,7 +67,7 @@ for volunteer_id in range(1, 11, 1):
     hidden_node_size = 11
     goal_sse = 1e-2
     epoch_step = 2000
-    start_epoch = 2000
+    start_epoch = 8000
     max_epoch_size = 10000
     # max_epoch = 10000
     hidden_node_begin = 1
@@ -177,6 +177,14 @@ for volunteer_id in range(1, 11, 1):
             fold_list.append(acc)
             print("Acc: %f, Class 1: %d, Class 2: %d, TP: %d, TN: %d" % (
             acc, predicted_true, predicted_false, true_positive, true_negative))
+            if max_epoch == 8000:
+                print("\n\nWeight\n")
+                print("w0")
+                print(w0)
+                print("w1")
+                print(w1)
+                print("\n\n")
+
         avg_acc = np.average(fold_list)
         print(avg_acc)
         # avg_acc = (np.sum(fold_list))/fold_range
